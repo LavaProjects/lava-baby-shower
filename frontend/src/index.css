@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gender-blue-light: #e0f2fe;
+  --color-gender-blue-medium: #38bdf8;
+  --color-gender-blue: #0284c7;
+  --color-gender-blue-dark: #0369a1;
+
+  --color-gender-pink-light: #fce7f3;
+  --color-gender-pink-medium: #f472b6;
+  --color-gender-pink: #db2777;
+  --color-gender-pink-dark: #be185d;
+
+  --color-gender-accent-gold: #f59e0b;
+  --color-gender-accent-goldlight: #fef3c7;
+  --color-gender-accent-dark: #b45309;
+
+  --color-soccer-pitch-light: #f0fdf4;
+  --color-soccer-pitch: #4ade80;
+  --color-soccer-pitch-medium: #22c55e;
+  --color-soccer-pitch-dark: #16a34a;
+  --color-soccer-pitch-deep: #15803d;
+
+  --color-soccer-gold-light: #fef9c3;
+  --color-soccer-gold: #f59e0b;
+  --color-soccer-gold-dark: #b45309;
+
+  --color-soccer-jersey-blue-light: #e0f2fe;
+  --color-soccer-jersey-blue: #38bdf8;
+  --color-soccer-jersey-blue-dark: #0284c7;
+
+  --color-soccer-jersey-pink-light: #fce7f3;
+  --color-soccer-jersey-pink: #f472b6;
+  --color-soccer-jersey-pink-dark: #db2777;
+
+  --font-sans: 'Outfit', 'Inter', sans-serif;
+  --font-handwritten: 'Caveat', 'Playpen Sans', cursive;
+
+  --animate-sway: sway 3s ease-in-out infinite;
+  --animate-bounce-slow: bounce 2.5s infinite;
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+}
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}
+
+/* Animaciones suaves personalizadas */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float-delayed {
+  animation: float-delayed 5s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Animación de corte de boleto con tijeras */
+@keyframes scissors-cut {
+  0% {
+    top: 0%;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  5% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-25deg);
+  }
+  15% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(25deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-25deg);
+  }
+  35% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(25deg);
+  }
+  45% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-25deg);
+  }
+  55% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(25deg);
+  }
+  65% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-25deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(25deg);
+  }
+  85% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-25deg);
+  }
+  95% {
+    top: 95%;
+    transform: translate(-50%, -50%) scale(1.25) rotate(25deg);
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+@keyframes tear-off {
+  0% {
+    transform: translate(0) rotate(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(60px, 120px) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.animate-scissors-cut {
+  animation: scissors-cut 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-tear-off {
+  animation: tear-off 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .md\:ticket-clipped {
+    transition: clip-path 0.4s ease-in-out;
+    clip-path: polygon(
+      0% 0%, 
+      66.6% 0%, 
+      66.6% 5%, 
+      65.8% 10%, 
+      66.6% 15%, 
+      65.8% 20%, 
+      66.6% 25%, 
+      65.8% 30%, 
+      66.6% 35%, 
+      65.8% 40%, 
+      66.6% 45%, 
+      65.8% 50%, 
+      66.6% 55%, 
+      65.8% 60%, 
+      66.6% 65%, 
+      65.8% 70%, 
+      66.6% 75%, 
+      65.8% 80%, 
+      66.6% 85%, 
+      65.8% 90%, 
+      66.6% 95%, 
+      66.6% 100%, 
+      0% 100%
+    );
+  }
+}
+
+/* Animaciones de corte y desprendimiento para móvil */
+@keyframes scissors-cut-mobile {
+  0% {
+    left: 0%;
+    transform: translate(-50%, -50%) scale(1) rotate(-45deg);
+  }
+  5% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-70deg);
+  }
+  15% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-20deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-70deg);
+  }
+  35% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-20deg);
+  }
+  45% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-70deg);
+  }
+  55% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-20deg);
+  }
+  65% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-70deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-20deg);
+  }
+  85% {
+    transform: translate(-50%, -50%) scale(1.25) rotate(-70deg);
+  }
+  95% {
+    left: 95%;
+    transform: translate(-50%, -50%) scale(1.25) rotate(-20deg);
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    transform: translate(-50%, -50%) scale(1) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes tear-off-mobile {
+  0% {
+    transform: translate(0) rotate(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(80px) rotate(4deg);
+    opacity: 0;
+  }
+}
+
+.animate-scissors-cut-mobile {
+  animation: scissors-cut-mobile 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.animate-tear-off-mobile {
+  animation: tear-off-mobile 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+}
+
+.ticket-clipped-mobile {
+  transition: clip-path 0.4s ease-in-out;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    97.5% 100%,
+    95% calc(100% - 12px),
+    92.5% 100%,
+    90% calc(100% - 12px),
+    87.5% 100%,
+    85% calc(100% - 12px),
+    82.5% 100%,
+    80% calc(100% - 12px),
+    77.5% 100%,
+    75% calc(100% - 12px),
+    72.5% 100%,
+    70% calc(100% - 12px),
+    67.5% 100%,
+    65% calc(100% - 12px),
+    62.5% 100%,
+    60% calc(100% - 12px),
+    57.5% 100%,
+    55% calc(100% - 12px),
+    52.5% 100%,
+    50% calc(100% - 12px),
+    47.5% 100%,
+    45% calc(100% - 12px),
+    42.5% 100%,
+    40% calc(100% - 12px),
+    37.5% 100%,
+    35% calc(100% - 12px),
+    32.5% 100%,
+    30% calc(100% - 12px),
+    27.5% 100%,
+    25% calc(100% - 12px),
+    22.5% 100%,
+    20% calc(100% - 12px),
+    17.5% 100%,
+    15% calc(100% - 12px),
+    12.5% 100%,
+    10% calc(100% - 12px),
+    7.5% 100%,
+    5% calc(100% - 12px),
+    2.5% 100%,
+    0% calc(100% - 12px)
+  );
+}
+
