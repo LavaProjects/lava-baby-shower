@@ -52,18 +52,17 @@ function App() {
         <IntroCard />
         <Scoreboard />
         <TicketSection onValidationChange={handleValidationChange} />
-        
         <div id="gender-derby-section">
           <GenderDerby isValidated={isValidated} guestInfo={guestInfo} />
+        </div>
+
+        <div id="message-wall-section">
+          <MessageWall guestInfo={guestInfo} />
         </div>
 
         <ScheduleSection />
         <MatchDetailsSection />
         <GiftTableSection />
-
-        <div id="message-wall-section">
-          <MessageWall guestInfo={guestInfo} />
-        </div>
 
         <Footer />
       </main>

@@ -243,6 +243,7 @@ export class AppService {
       throw new NotFoundException('Invitado no encontrado.');
     }
     await this.voteRepository.delete({ codigoAcceso: guest.codigoAcceso });
+    await this.messageRepository.delete({ codigoAcceso: guest.codigoAcceso });
     await this.guestRepository.remove(guest);
     return { success: true };
   }
