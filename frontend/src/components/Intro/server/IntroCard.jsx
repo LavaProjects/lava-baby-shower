@@ -7,9 +7,9 @@ export function IntroCard() {
   return (
     <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-10 shadow-xl text-slate-700 max-w-2xl mx-auto leading-relaxed text-sm md:text-base border-t-4 border-t-emerald-500 mb-10 text-center animate-float-delayed">
       <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-2 leading-none">
-        Yolanda & Ulises
+        Yola & Ulises
       </h1>
-      
+
       <p className="font-handwritten text-3xl md:text-5xl text-emerald-700 font-bold mt-1 mb-5">
         ¡Presentan a su Fichaje Estrella! ⚽✨
       </p>
@@ -25,7 +25,7 @@ export function IntroCard() {
       </div>
 
       <p className="font-medium text-slate-700">
-        Yolanda Ramírez y Ulises Lavariega tenemos el honor y la inmensa alegría de invitarte a celebrar el <strong>Baby Shower & Revelación de Género</strong> de nuestro bebé al estilo <strong>Bebé F.C.</strong>
+        Yolanda Ramírez y Ulises Lavariega tienen el honor y la inmensa alegría de invitarte a celebrar el <strong>Baby Shower & Revelación de Género</strong> de nuestro bebé al estilo <strong>Bebé F.C.</strong>
       </p>
       <p className="mt-3 font-semibold text-emerald-800">
         ¡Acompáñanos a vivir la emoción del silbatazo inicial y descubrir juntos los colores de nuestro nuevo integrante! 🏟️⚽✨

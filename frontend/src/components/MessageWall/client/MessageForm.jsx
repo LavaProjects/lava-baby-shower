@@ -7,55 +7,86 @@ export function MessageForm({
   newMessageContent,
   setNewMessageContent,
   messageSuccess,
-  handleMessageSubmit
+  handleMessageSubmit,
+  numeroIntegrante,
+  setNumeroIntegrante,
+  pasesConfirmados = 1,
+  registeredIntegrantes = []
 }) {
   return (
     <form onSubmit={handleMessageSubmit} className="space-y-4 mb-8 bg-slate-50/50 p-5 rounded-2xl border border-slate-200/60">
+      
+      {/* Grid 1: Integrante Selector & Nombre del Integrante */}
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label className="block text-[9px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">
-            Nombre del Hincha / Familia
+            ¿Qué número de integrante de tu grupo eres?
+          </label>
+          <select
+            value={numeroIntegrante}
+            onChange={(e) => setNumeroIntegrante(Number(e.target.value))}
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-slate-700 font-semibold"
+          >
+            {Array.from({ length: pasesConfirmados || 1 }, (_, i) => {
+              const num = i + 1;
+              const isRegistered = registeredIntegrantes.includes(num);
+              return (
+                <option key={num} value={num} disabled={isRegistered}>
+                  Integrante {num} {isRegistered ? '✓ (Mensaje colgado)' : ''}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-[9px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">
+            Nombre del Integrante
           </label>
           <input
             type="text"
-            placeholder="Ej: Familia Gómez"
+            placeholder="Ej: Sofía Ramírez"
             value={newMessageName}
             onChange={(e) => setNewMessageName(e.target.value)}
             className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-slate-700 font-semibold"
           />
         </div>
-        <div className="flex flex-col justify-end">
-          <span className="text-[9px] text-slate-400 leading-tight">
-            * Tu firma se colocará inmediatamente en las pizarras de abajo.
-          </span>
-        </div>
       </div>
+
+      {/* Grid 2: Textarea */}
       <div>
         <label className="block text-[9px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">
-          Mensaje de Apoyo
+          Mensaje de Apoyo / Felicitación
         </label>
         <textarea
           rows="3"
-          placeholder="Ej: ¡Felicidades Yolanda y Ulises! Ya queremos conocer al nuevo integrante de la alineación..."
+          placeholder="Ej: ¡Muchas felicidades Yolanda y Ulises! Les deseo lo mejor en esta nueva etapa..."
           value={newMessageContent}
           onChange={(e) => setNewMessageContent(e.target.value)}
           className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-slate-700 leading-relaxed"
         />
       </div>
+
       {messageSuccess && (
         <p className="text-xs text-emerald-600 font-bold text-center inline-flex items-center justify-center gap-1.5 w-full">
           <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>¡Mensaje colgado con éxito en la pizarra de la afición!</span>
+          <span>¡Mensaje colgado con éxito en la pizarra familiar!</span>
         </p>
       )}
-      <button
-        type="submit"
-        onClick={handleMessageSubmit}
-        className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-extrabold transition text-xs uppercase tracking-wider shadow-md shadow-emerald-600/20 inline-flex items-center justify-center space-x-2"
-      >
-        <Send className="w-4 h-4 text-white" />
-        <span>Colgar Mensaje de Aficionado</span>
-      </button>
+
+      {registeredIntegrantes.length >= pasesConfirmados ? (
+        <div className="w-full py-3 bg-slate-100 border border-slate-200 text-slate-400 rounded-xl text-center text-xs font-black uppercase tracking-wider">
+          🚫 Se alcanzaron los mensajes máximos de tu grupo ({pasesConfirmados}/{pasesConfirmados})
+        </div>
+      ) : (
+        <button
+          type="submit"
+          className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-extrabold transition text-xs uppercase tracking-wider shadow-md shadow-emerald-600/20 inline-flex items-center justify-center space-x-2"
+        >
+          <Send className="w-4 h-4 text-white" />
+          <span>Colgar Mensaje de Aficionado</span>
+        </button>
+      )}
     </form>
   );
 }

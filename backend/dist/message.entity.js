@@ -15,6 +15,8 @@ let Message = class Message {
     id;
     nombre;
     contenido;
+    codigoAcceso;
+    numeroIntegrante;
     fechaCreacion;
 };
 exports.Message = Message;
@@ -30,6 +32,14 @@ __decorate([
     (0, typeorm_1.Column)('text'),
     __metadata("design:type", String)
 ], Message.prototype, "contenido", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Message.prototype, "codigoAcceso", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'int', default: 1 }),
+    __metadata("design:type", Number)
+], Message.prototype, "numeroIntegrante", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

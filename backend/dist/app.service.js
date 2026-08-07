@@ -84,20 +84,51 @@ let AppService = class AppService {
             porcentajeNina: total > 0 ? Math.round((nina / total) * 100) : 0,
         };
     }
-    async addMessage(nombre, contenido) {
+    async addMessage(nombre, contenido, codigoAcceso, numeroIntegrante) {
         if (!nombre || nombre.trim().length === 0) {
             throw new common_1.BadRequestException('El nombre es requerido.');
         }
         if (!contenido || contenido.trim().length === 0) {
             throw new common_1.BadRequestException('El mensaje no puede estar vacío.');
         }
+        let cleanCode = '';
+        let finalIntegrante = 1;
+        if (codigoAcceso) {
+            cleanCode = codigoAcceso.trim().toUpperCase();
+            const guest = await this.guestRepository.findOne({ where: { codigoAcceso: cleanCode } });
+            if (!guest) {
+                throw new common_1.BadRequestException('El código de invitación no es válido.');
+            }
+            if (!guest.confirmado) {
+                throw new common_1.BadRequestException('Debes confirmar tu asistencia antes de dejar un mensaje.');
+            }
+            finalIntegrante = Number(numeroIntegrante) || 1;
+            if (finalIntegrante < 1 || finalIntegrante > guest.pasesConfirmados) {
+                throw new common_1.BadRequestException(`El número de integrante debe estar entre 1 y ${guest.pasesConfirmados}.`);
+            }
+            const existingMessage = await this.messageRepository.findOne({
+                where: { codigoAcceso: cleanCode, numeroIntegrante: finalIntegrante },
+            });
+            if (existingMessage) {
+                throw new common_1.BadRequestException(`El integrante ${finalIntegrante} de tu grupo ya ha registrado su mensaje de felicitación.`);
+            }
+        }
         const message = this.messageRepository.create({
             nombre: nombre.trim(),
             contenido: contenido.trim(),
+            codigoAcceso: cleanCode || undefined,
+            numeroIntegrante: finalIntegrante,
         });
         return this.messageRepository.save(message);
     }
-    async getMessages() {
+    async getMessages(codigoAcceso) {
+        if (codigoAcceso) {
+            const cleanCode = codigoAcceso.trim().toUpperCase();
+            return this.messageRepository.find({
+                where: { codigoAcceso: cleanCode },
+                order: { numeroIntegrante: 'ASC' },
+            });
+        }
         return this.messageRepository.find({
             order: { fechaCreacion: 'DESC' },
         });

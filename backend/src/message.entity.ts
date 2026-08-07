@@ -11,6 +11,12 @@ export class Message {
   @Column('text')
   contenido: string;
 
+  @Column({ nullable: true })
+  codigoAcceso?: string;
+
+  @Column({ type: 'int', default: 1 })
+  numeroIntegrante: number;
+
   @CreateDateColumn()
   fechaCreacion: Date;
 }

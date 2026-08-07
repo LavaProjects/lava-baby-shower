@@ -42,10 +42,10 @@ let AppController = class AppController {
         return this.appService.getVotesSummary();
     }
     async addMessage(body) {
-        return this.appService.addMessage(body.nombre, body.contenido);
+        return this.appService.addMessage(body.nombre, body.contenido, body.codigo, body.numeroIntegrante);
     }
-    async getMessages() {
-        return this.appService.getMessages();
+    async getMessages(codigo) {
+        return this.appService.getMessages(codigo);
     }
     async seedGuests() {
         return this.appService.seedGuests();
@@ -124,8 +124,9 @@ __decorate([
 ], AppController.prototype, "addMessage", null);
 __decorate([
     (0, common_1.Get)('message'),
+    __param(0, (0, common_1.Query)('codigo')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "getMessages", null);
 __decorate([

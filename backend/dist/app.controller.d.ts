@@ -34,8 +34,10 @@ export declare class AppController {
     addMessage(body: {
         nombre: string;
         contenido: string;
+        codigo?: string;
+        numeroIntegrante?: number;
     }): Promise<import("./message.entity").Message>;
-    getMessages(): Promise<import("./message.entity").Message[]>;
+    getMessages(codigo?: string): Promise<import("./message.entity").Message[]>;
     seedGuests(): Promise<{
         message: string;
         count: number;

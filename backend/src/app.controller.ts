@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, Headers, HttpStatus, HttpCode, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Headers, HttpStatus, HttpCode, UnauthorizedException, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('api')
@@ -45,14 +45,14 @@ export class AppController {
 
   // Crear mensaje
   @Post('message')
-  async addMessage(@Body() body: { nombre: string; contenido: string }) {
-    return this.appService.addMessage(body.nombre, body.contenido);
+  async addMessage(@Body() body: { nombre: string; contenido: string; codigo?: string; numeroIntegrante?: number }) {
+    return this.appService.addMessage(body.nombre, body.contenido, body.codigo, body.numeroIntegrante);
   }
 
   // Obtener mensajes
   @Get('message')
-  async getMessages() {
-    return this.appService.getMessages();
+  async getMessages(@Query('codigo') codigo?: string) {
+    return this.appService.getMessages(codigo);
   }
 
   // Sembrar base de datos

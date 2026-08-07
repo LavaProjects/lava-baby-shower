@@ -90,7 +90,12 @@ export class AppService {
   }
 
   // Agregar un mensaje
-  async addMessage(nombre: string, contenido: string): Promise<Message> {
+  async addMessage(
+    nombre: string,
+    contenido: string,
+    codigoAcceso?: string,
+    numeroIntegrante?: number,
+  ): Promise<Message> {
     if (!nombre || nombre.trim().length === 0) {
       throw new BadRequestException('El nombre es requerido.');
     }
@@ -98,16 +103,55 @@ export class AppService {
       throw new BadRequestException('El mensaje no puede estar vacío.');
     }
 
+    let cleanCode = '';
+    let finalIntegrante = 1;
+
+    if (codigoAcceso) {
+      cleanCode = codigoAcceso.trim().toUpperCase();
+      const guest = await this.guestRepository.findOne({ where: { codigoAcceso: cleanCode } });
+      if (!guest) {
+        throw new BadRequestException('El código de invitación no es válido.');
+      }
+      if (!guest.confirmado) {
+        throw new BadRequestException('Debes confirmar tu asistencia antes de dejar un mensaje.');
+      }
+
+      finalIntegrante = Number(numeroIntegrante) || 1;
+      if (finalIntegrante < 1 || finalIntegrante > guest.pasesConfirmados) {
+        throw new BadRequestException(
+          `El número de integrante debe estar entre 1 y ${guest.pasesConfirmados}.`,
+        );
+      }
+
+      const existingMessage = await this.messageRepository.findOne({
+        where: { codigoAcceso: cleanCode, numeroIntegrante: finalIntegrante },
+      });
+      if (existingMessage) {
+        throw new BadRequestException(
+          `El integrante ${finalIntegrante} de tu grupo ya ha registrado su mensaje de felicitación.`,
+        );
+      }
+    }
+
     const message = this.messageRepository.create({
       nombre: nombre.trim(),
       contenido: contenido.trim(),
+      codigoAcceso: cleanCode || undefined,
+      numeroIntegrante: finalIntegrante,
     });
 
     return this.messageRepository.save(message);
   }
 
-  // Obtener todos los mensajes
-  async getMessages(): Promise<Message[]> {
+  // Obtener mensajes (filtrados opcionalmente por código de acceso de la familia)
+  async getMessages(codigoAcceso?: string): Promise<Message[]> {
+    if (codigoAcceso) {
+      const cleanCode = codigoAcceso.trim().toUpperCase();
+      return this.messageRepository.find({
+        where: { codigoAcceso: cleanCode },
+        order: { numeroIntegrante: 'ASC' },
+      });
+    }
     return this.messageRepository.find({
       order: { fechaCreacion: 'DESC' },
     });

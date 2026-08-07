@@ -19,8 +19,8 @@ export declare class AppService {
         porcentajeNino: number;
         porcentajeNina: number;
     }>;
-    addMessage(nombre: string, contenido: string): Promise<Message>;
-    getMessages(): Promise<Message[]>;
+    addMessage(nombre: string, contenido: string, codigoAcceso?: string, numeroIntegrante?: number): Promise<Message>;
+    getMessages(codigoAcceso?: string): Promise<Message[]>;
     seedGuests(): Promise<{
         message: string;
         count: number;
