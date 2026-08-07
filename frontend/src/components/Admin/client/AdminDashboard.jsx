@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShieldCheck } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export function AdminDashboard() {
-  const [adminPassword, setAdminPassword] = useState('');
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [adminPassword, setAdminPassword] = useState(() => sessionStorage.getItem('adminPassword') || '');
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => !!sessionStorage.getItem('adminPassword'));
   const [adminLoginError, setAdminLoginError] = useState('');
   const [adminGuests, setAdminGuests] = useState([]);
   const [adminSummary, setAdminSummary] = useState(null);
@@ -18,6 +18,12 @@ export function AdminDashboard() {
   const [adminSearch, setAdminSearch] = useState('');
   const [adminFilter, setAdminFilter] = useState('todos');
 
+  useEffect(() => {
+    if (isAdminLoggedIn && adminPassword) {
+      fetchAdminData();
+    }
+  }, [isAdminLoggedIn, adminPassword]);
+
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setAdminLoginError('');
@@ -28,8 +34,8 @@ export function AdminDashboard() {
       });
 
       if (res.ok) {
+        sessionStorage.setItem('adminPassword', adminPassword);
         setIsAdminLoggedIn(true);
-        fetchAdminData();
       } else {
         setAdminLoginError('Contraseña incorrecta. Acceso denegado.');
       }
@@ -39,6 +45,8 @@ export function AdminDashboard() {
   };
 
   const fetchAdminData = async () => {
+    if (!adminPassword) return;
+
     try {
       const resGuests = await fetch(`${API_BASE_URL}/admin/guests`, {
         headers: { 'x-admin-password': adminPassword }
@@ -46,6 +54,11 @@ export function AdminDashboard() {
       if (resGuests.ok) {
         const data = await resGuests.json();
         setAdminGuests(data);
+      } else if (resGuests.status === 401) {
+        setIsAdminLoggedIn(false);
+        setAdminPassword('');
+        sessionStorage.removeItem('adminPassword');
+        return;
       }
 
       const resSummary = await fetch(`${API_BASE_URL}/admin/summary`, {
@@ -165,12 +178,26 @@ export function AdminDashboard() {
             Bebé F.C. — Gestión del Club
           </h1>
         </div>
-        <button
-          onClick={() => { window.location.hash = ''; }}
-          className="px-6 py-3 border border-slate-200 bg-white hover:bg-slate-50 font-extrabold text-slate-700 rounded-full transition text-sm flex items-center space-x-2 shadow-sm"
-        >
-          <span>🏟️</span> <span>Ir a la Cancha (Invitación)</span>
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => { window.location.hash = ''; }}
+            className="px-6 py-3 border border-slate-200 bg-white hover:bg-slate-50 font-extrabold text-slate-700 rounded-full transition text-sm flex items-center space-x-2 shadow-sm"
+          >
+            <span>🏟️</span> <span>Ir a la Cancha</span>
+          </button>
+          
+          <button
+            onClick={() => {
+              sessionStorage.removeItem('adminPassword');
+              setAdminPassword('');
+              setIsAdminLoggedIn(false);
+              window.location.hash = '';
+            }}
+            className="px-6 py-3 border border-red-200 bg-red-50 hover:bg-red-100 font-extrabold text-red-700 rounded-full transition text-sm flex items-center space-x-2 shadow-sm animate-fade-in"
+          >
+            <span>🚪</span> <span>Cerrar Sesión</span>
+          </button>
+        </div>
       </header>
 
       {/* Admin Login Panel */}
