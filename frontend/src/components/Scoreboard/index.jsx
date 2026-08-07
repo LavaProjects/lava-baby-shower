@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScoreboardHeader } from './server/ScoreboardHeader';
 import { CountdownTimer } from './client/CountdownTimer';
 
-export function Scoreboard({ targetDateString = '2026-10-25T16:00:00' }) {
+export function Scoreboard({ targetDateString = '2026-10-25T14:00:00' }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {

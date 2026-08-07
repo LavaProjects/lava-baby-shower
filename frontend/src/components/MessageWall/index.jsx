@@ -50,6 +50,18 @@ export function MessageWall({ guestInfo }) {
     }
   }, [messages, guestInfo]);
 
+  // Sincronizar campos del formulario al cambiar de integrante seleccionado o al actualizar mensajes
+  useEffect(() => {
+    const existing = messages.find((m) => m.numeroIntegrante === numeroIntegrante);
+    if (existing) {
+      setNewMessageName(existing.nombre);
+      setNewMessageContent(existing.contenido);
+    } else {
+      setNewMessageName('');
+      setNewMessageContent('');
+    }
+  }, [numeroIntegrante, messages]);
+
   const fetchMessages = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/message?codigo=${guestInfo.codigoAcceso}`);

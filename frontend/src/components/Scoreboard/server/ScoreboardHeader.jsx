@@ -9,7 +9,7 @@ export function ScoreboardHeader() {
         <span>TABLERO DE TIEMPO: SILBATAZO INICIAL</span>
       </span>
       <h3 className="text-xl md:text-2xl font-extrabold text-slate-900 mb-1">Conteo Regresivo del Partido</h3>
-      <p className="text-xs font-extrabold tracking-wider text-slate-400 mb-6 uppercase">25 Octubre 2026 • 16:00 Hrs</p>
+      <p className="text-xs font-extrabold tracking-wider text-slate-400 mb-6 uppercase">25 Octubre 2026 • 02:00 PM</p>
     </>
   );
 }

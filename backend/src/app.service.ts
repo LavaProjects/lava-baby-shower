@@ -127,9 +127,9 @@ export class AppService {
         where: { codigoAcceso: cleanCode, numeroIntegrante: finalIntegrante },
       });
       if (existingMessage) {
-        throw new BadRequestException(
-          `El integrante ${finalIntegrante} de tu grupo ya ha registrado su mensaje de felicitación.`,
-        );
+        existingMessage.nombre = nombre.trim();
+        existingMessage.contenido = contenido.trim();
+        return this.messageRepository.save(existingMessage);
       }
     }
 

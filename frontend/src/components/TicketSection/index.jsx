@@ -3,6 +3,7 @@ import { TicketHeaderBar } from './server/TicketHeaderBar';
 import { ValidateCodeForm } from './client/ValidateCodeForm';
 import { RSVPForm } from './client/RSVPForm';
 import { TicketCutStub } from './client/TicketCutStub';
+import { RsvpSuccessModal } from './client/RsvpSuccessModal';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -17,6 +18,7 @@ export function TicketSection({ onValidationChange }) {
   const [pasesConfirmados, setPasesConfirmados] = useState(1);
   const [rsvpCompleted, setRsvpCompleted] = useState(false);
   const [animateCut, setAnimateCut] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleValidateCode = async (e) => {
     e.preventDefault();
@@ -74,6 +76,7 @@ export function TicketSection({ onValidationChange }) {
         setTimeout(() => {
           setRsvpCompleted(true);
           setAnimateCut(false);
+          setShowSuccessModal(true); // Abre el modal de invitaciones
         }, 1500);
       }
     } catch (err) {
@@ -117,6 +120,8 @@ export function TicketSection({ onValidationChange }) {
           guestInfo={guestInfo}
         />
       </div>
+
+      <RsvpSuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
     </section>
   );
 }

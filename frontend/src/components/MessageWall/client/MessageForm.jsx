@@ -1,5 +1,5 @@
 import React from 'react';
-import { Send, CheckCircle2 } from 'lucide-react';
+import { FaPaperPlane, FaCheckCircle, FaEdit } from 'react-icons/fa';
 
 export function MessageForm({
   newMessageName,
@@ -13,6 +13,8 @@ export function MessageForm({
   pasesConfirmados = 1,
   registeredIntegrantes = []
 }) {
+  const isEditing = registeredIntegrantes.includes(numeroIntegrante);
+
   return (
     <form onSubmit={handleMessageSubmit} className="space-y-4 mb-8 bg-slate-50/50 p-5 rounded-2xl border border-slate-200/60">
       
@@ -31,7 +33,7 @@ export function MessageForm({
               const num = i + 1;
               const isRegistered = registeredIntegrantes.includes(num);
               return (
-                <option key={num} value={num} disabled={isRegistered}>
+                <option key={num} value={num}>
                   Integrante {num} {isRegistered ? '✓ (Mensaje colgado)' : ''}
                 </option>
               );
@@ -69,24 +71,35 @@ export function MessageForm({
 
       {messageSuccess && (
         <p className="text-xs text-emerald-600 font-bold text-center inline-flex items-center justify-center gap-1.5 w-full">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>¡Mensaje colgado con éxito en la pizarra familiar!</span>
+          <FaCheckCircle className="w-4 h-4 text-emerald-600" />
+          <span>¡Mensaje guardado con éxito en la pizarra familiar!</span>
         </p>
       )}
 
-      {registeredIntegrantes.length >= pasesConfirmados ? (
-        <div className="w-full py-3 bg-slate-100 border border-slate-200 text-slate-400 rounded-xl text-center text-xs font-black uppercase tracking-wider">
-          🚫 Se alcanzaron los mensajes máximos de tu grupo ({pasesConfirmados}/{pasesConfirmados})
+      {registeredIntegrantes.length >= pasesConfirmados && (
+        <div className="text-center pt-1">
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+            💡 Has registrado todos los mensajes de tu grupo ({pasesConfirmados}/{pasesConfirmados}). Puedes seleccionar cualquiera en la lista para editarlo.
+          </p>
         </div>
-      ) : (
-        <button
-          type="submit"
-          className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-extrabold transition text-xs uppercase tracking-wider shadow-md shadow-emerald-600/20 inline-flex items-center justify-center space-x-2"
-        >
-          <Send className="w-4 h-4 text-white" />
-          <span>Colgar Mensaje de Aficionado</span>
-        </button>
       )}
+
+      <button
+        type="submit"
+        className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-extrabold transition text-xs uppercase tracking-wider shadow-md shadow-emerald-600/20 inline-flex items-center justify-center space-x-2"
+      >
+        {isEditing ? (
+          <>
+            <FaEdit className="w-4 h-4 text-white" />
+            <span>Actualizar Mensaje de Integrante {numeroIntegrante}</span>
+          </>
+        ) : (
+          <>
+            <FaPaperPlane className="w-4 h-4 text-white" />
+            <span>Colgar Mensaje de Integrante {numeroIntegrante}</span>
+          </>
+        )}
+      </button>
     </form>
   );
 }

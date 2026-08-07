@@ -24,11 +24,11 @@ export function ScheduleSection() {
 
       <div className="relative border-l border-slate-200 ml-4 md:ml-6 space-y-8 py-2">
         
-        {/* 14:00 - 14:30 */}
+        {/* 02:00 PM - 02:30 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-slate-400 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-black rounded-full border border-slate-200/50 tracking-wider uppercase mb-1">
-            14:00 - 14:30 Hrs
+            02:00 PM - 02:30 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>Apertura de Puertas & Recepción</span>
@@ -39,11 +39,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 14:30 - 15:00 */}
+        {/* 02:30 PM - 03:00 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-sky-400 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-black rounded-full border border-slate-200/50 tracking-wider uppercase mb-1">
-            14:30 - 15:00 Hrs
+            02:30 PM - 03:00 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>El Calentamiento (Socializar y Votos)</span>
@@ -54,11 +54,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 15:00 - 16:00 */}
+        {/* 03:00 PM - 04:00 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-emerald-500 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-black rounded-full border border-slate-200/50 tracking-wider uppercase mb-1">
-            15:00 - 16:00 Hrs
+            03:00 PM - 04:00 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>Banquete de la Victoria (La Comida)</span>
@@ -69,11 +69,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 16:00 - 17:00 */}
+        {/* 04:00 PM - 05:00 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-amber-400 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-black rounded-full border border-slate-200/50 tracking-wider uppercase mb-1">
-            16:00 - 17:00 Hrs
+            04:00 PM - 05:00 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>El Primer Tiempo (Juegos Clásicos)</span>
@@ -84,11 +84,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 17:00 - 18:00 */}
+        {/* 05:00 PM - 06:00 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-indigo-500 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-black rounded-full border border-slate-200/50 tracking-wider uppercase mb-1">
-            17:00 - 18:00 Hrs
+            05:00 PM - 06:00 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>El Entretiempo (Charla & DJ)</span>
@@ -99,11 +99,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 18:00 - 18:30 */}
+        {/* 06:00 PM - 06:30 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-soccer-gold border-4 border-white shadow-sm animate-pulse"></div>
           <span className="inline-block px-2.5 py-0.5 bg-soccer-gold-light/50 text-soccer-gold-dark text-[10px] font-black rounded-full border border-soccer-gold/20 tracking-wider uppercase mb-1">
-            18:00 - 18:30 Hrs
+            06:00 PM - 06:30 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>El Gran Gol de Oro: Revelación</span>
@@ -114,11 +114,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 18:30 - 19:30 */}
+        {/* 06:30 PM - 07:30 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-purple-500 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded-full border border-purple-200/30 tracking-wider uppercase mb-1">
-            18:30 - 19:30 Hrs
+            06:30 PM - 07:30 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>Tiempo Extra (Música & DJ)</span>
@@ -129,11 +129,11 @@ export function ScheduleSection() {
           </p>
         </div>
 
-        {/* 19:30 - 20:00 */}
+        {/* 07:30 PM - 08:00 PM */}
         <div className="relative pl-8 md:pl-10">
           <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-red-500 border-4 border-white shadow-sm"></div>
           <span className="inline-block px-2.5 py-0.5 bg-red-100 text-red-700 text-[10px] font-black rounded-full border border-red-200/30 tracking-wider uppercase mb-1">
-            19:30 - 20:00 Hrs
+            07:30 PM - 08:00 PM
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
             <span>El Silbatazo Final (La Salida)</span>
