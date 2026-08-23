@@ -31,6 +31,7 @@ export declare class AppService {
     deleteGuest(id: string): Promise<{
         success: boolean;
     }>;
+    updateGuest(id: string, nombre: string, pasesMaximos: number, codigoAcceso?: string): Promise<Guest>;
     deleteMessage(id: number): Promise<{
         success: boolean;
     }>;

@@ -110,7 +110,9 @@ let AppService = class AppService {
                 where: { codigoAcceso: cleanCode, numeroIntegrante: finalIntegrante },
             });
             if (existingMessage) {
-                throw new common_1.BadRequestException(`El integrante ${finalIntegrante} de tu grupo ya ha registrado su mensaje de felicitación.`);
+                existingMessage.nombre = nombre.trim();
+                existingMessage.contenido = contenido.trim();
+                return this.messageRepository.save(existingMessage);
             }
         }
         const message = this.messageRepository.create({
@@ -205,8 +207,30 @@ let AppService = class AppService {
             throw new common_1.NotFoundException('Invitado no encontrado.');
         }
         await this.voteRepository.delete({ codigoAcceso: guest.codigoAcceso });
+        await this.messageRepository.delete({ codigoAcceso: guest.codigoAcceso });
         await this.guestRepository.remove(guest);
         return { success: true };
+    }
+    async updateGuest(id, nombre, pasesMaximos, codigoAcceso) {
+        const guest = await this.guestRepository.findOne({ where: { id } });
+        if (!guest) {
+            throw new common_1.NotFoundException('Invitado no encontrado.');
+        }
+        if (codigoAcceso) {
+            const cleanCode = codigoAcceso.trim().toUpperCase();
+            if (cleanCode !== guest.codigoAcceso) {
+                const existing = await this.guestRepository.findOne({ where: { codigoAcceso: cleanCode } });
+                if (existing) {
+                    throw new common_1.BadRequestException('El código de acceso ya está asignado a otro invitado.');
+                }
+                await this.voteRepository.update({ codigoAcceso: guest.codigoAcceso }, { codigoAcceso: cleanCode });
+                await this.messageRepository.update({ codigoAcceso: guest.codigoAcceso }, { codigoAcceso: cleanCode });
+                guest.codigoAcceso = cleanCode;
+            }
+        }
+        guest.nombre = nombre.trim();
+        guest.pasesMaximos = pasesMaximos;
+        return this.guestRepository.save(guest);
     }
     async deleteMessage(id) {
         const msg = await this.messageRepository.findOne({ where: { id } });

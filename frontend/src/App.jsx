@@ -12,6 +12,7 @@ import { ScheduleSection } from './components/Schedule/server/ScheduleSection';
 import { MatchDetailsSection } from './components/MatchDetails/server/MatchDetailsSection';
 import { GiftTableSection } from './components/GiftTable/server/GiftTableSection';
 import { MessageWall } from './components/MessageWall';
+import { MenuSection } from './components/Menu/MenuSection';
 import { Footer } from './components/Footer/server/Footer';
 import { AdminDashboard } from './components/Admin/client/AdminDashboard';
 
@@ -61,6 +62,7 @@ function App() {
         </div>
 
         <ScheduleSection />
+        <MenuSection />
         <MatchDetailsSection />
         <GiftTableSection />
 

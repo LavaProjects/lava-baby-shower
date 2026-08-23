@@ -71,6 +71,10 @@ let AppController = class AppController {
         this.checkAdminAuth(adminPass);
         return this.appService.addGuest(body.nombre, body.pasesMaximos, body.codigoAcceso);
     }
+    async updateAdminGuest(id, body, adminPass) {
+        this.checkAdminAuth(adminPass);
+        return this.appService.updateGuest(id, body.nombre, body.pasesMaximos, body.codigoAcceso);
+    }
     async deleteAdminGuest(id, adminPass) {
         this.checkAdminAuth(adminPass);
         return this.appService.deleteGuest(id);
@@ -165,6 +169,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "addAdminGuest", null);
+__decorate([
+    (0, common_1.Post)('admin/guests/update/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Headers)('x-admin-password')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, String]),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "updateAdminGuest", null);
 __decorate([
     (0, common_1.Delete)('admin/guests/:id'),
     __param(0, (0, common_1.Param)('id')),

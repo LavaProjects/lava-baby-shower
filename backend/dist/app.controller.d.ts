@@ -66,6 +66,11 @@ export declare class AppController {
         pasesMaximos: number;
         codigoAcceso?: string;
     }, adminPass?: string): Promise<import("./guest.entity").Guest>;
+    updateAdminGuest(id: string, body: {
+        nombre: string;
+        pasesMaximos: number;
+        codigoAcceso?: string;
+    }, adminPass?: string): Promise<import("./guest.entity").Guest>;
     deleteAdminGuest(id: string, adminPass?: string): Promise<{
         success: boolean;
     }>;
