@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck } from 'lucide-react';
+import { FaSearch } from 'react-icons/fa';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -184,8 +185,11 @@ export function AdminDashboard() {
     const matchesSearch = guest.nombre.toLowerCase().includes(adminSearch.toLowerCase()) || 
                           guest.codigoAcceso.toLowerCase().includes(adminSearch.toLowerCase());
     
-    if (adminFilter === 'confirmados') {
-      return matchesSearch && guest.confirmado;
+    if (adminFilter === 'confirmados-si') {
+      return matchesSearch && guest.confirmado && guest.asistira;
+    }
+    if (adminFilter === 'confirmados-no') {
+      return matchesSearch && guest.confirmado && !guest.asistira;
     }
     if (adminFilter === 'pendientes') {
       return matchesSearch && !guest.confirmado;
@@ -353,27 +357,36 @@ export function AdminDashboard() {
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
               <h3 className="text-xl font-extrabold text-slate-800">📋 Lista General de Aficionados</h3>
               
-              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                <input
-                  type="text"
-                  placeholder="Buscar hincha por nombre o código..."
-                  value={adminSearch}
-                  onChange={(e) => setAdminSearch(e.target.value)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-800 font-semibold text-slate-700 bg-white w-full sm:w-64"
-                />
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-center">
+                <div className="relative w-full sm:w-64">
+                  <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-3.5 h-3.5" />
+                  <input
+                    type="text"
+                    placeholder="Buscar hincha por nombre o código..."
+                    value={adminSearch}
+                    onChange={(e) => setAdminSearch(e.target.value)}
+                    className="pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-800 font-semibold text-slate-700 bg-white w-full"
+                  />
+                </div>
 
-                <div className="flex border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5 text-xs font-extrabold text-slate-500">
-                  {['todos', 'confirmados', 'pendientes'].map((filter) => (
+                <div className="flex border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5 text-[10px] font-extrabold text-slate-500 w-full sm:w-auto justify-between">
+                  {[
+                    { key: 'todos', label: 'Todos' },
+                    { key: 'confirmados-si', label: 'Asistirá ⚽' },
+                    { key: 'confirmados-no', label: 'No Asistirá ❌' },
+                    { key: 'pendientes', label: 'Pendientes ⏳' }
+                  ].map((filterObj) => (
                     <button
-                      key={filter}
-                      onClick={() => setAdminFilter(filter)}
-                      className={`px-3 py-2 rounded-lg capitalize transition ${
-                        adminFilter === filter 
-                          ? 'bg-white text-slate-800 shadow-sm border border-slate-200/40' 
+                      key={filterObj.key}
+                      onClick={() => setAdminFilter(filterObj.key)}
+                      type="button"
+                      className={`px-3 py-2 rounded-lg transition text-center flex-1 sm:flex-none ${
+                        adminFilter === filterObj.key 
+                          ? 'bg-white text-slate-800 shadow-sm border border-slate-200/40 font-black' 
                           : 'hover:text-slate-800'
                       }`}
                     >
-                      {filter}
+                      {filterObj.label}
                     </button>
                   ))}
                 </div>
