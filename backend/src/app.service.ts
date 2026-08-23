@@ -248,6 +248,33 @@ export class AppService {
     return { success: true };
   }
 
+  // Actualizar un invitado existente
+  async updateGuest(id: string, nombre: string, pasesMaximos: number, codigoAcceso?: string): Promise<Guest> {
+    const guest = await this.guestRepository.findOne({ where: { id } });
+    if (!guest) {
+      throw new NotFoundException('Invitado no encontrado.');
+    }
+
+    if (codigoAcceso) {
+      const cleanCode = codigoAcceso.trim().toUpperCase();
+      if (cleanCode !== guest.codigoAcceso) {
+        const existing = await this.guestRepository.findOne({ where: { codigoAcceso: cleanCode } });
+        if (existing) {
+          throw new BadRequestException('El código de acceso ya está asignado a otro invitado.');
+        }
+        // Si cambia el código, actualizamos en cascada las relaciones de votos y mensajes
+        await this.voteRepository.update({ codigoAcceso: guest.codigoAcceso }, { codigoAcceso: cleanCode });
+        await this.messageRepository.update({ codigoAcceso: guest.codigoAcceso }, { codigoAcceso: cleanCode });
+        guest.codigoAcceso = cleanCode;
+      }
+    }
+
+    guest.nombre = nombre.trim();
+    guest.pasesMaximos = pasesMaximos;
+    return this.guestRepository.save(guest);
+  }
+
+
   // Eliminar un mensaje (Moderación)
   async deleteMessage(id: number): Promise<{ success: boolean }> {
     const msg = await this.messageRepository.findOne({ where: { id } });

@@ -17,6 +17,7 @@ export function AdminDashboard() {
   const [guestFormError, setGuestFormError] = useState('');
   const [adminSearch, setAdminSearch] = useState('');
   const [adminFilter, setAdminFilter] = useState('todos');
+  const [editingGuestId, setEditingGuestId] = useState(null);
 
   useEffect(() => {
     if (isAdminLoggedIn && adminPassword) {
@@ -89,8 +90,13 @@ export function AdminDashboard() {
       return;
     }
 
+    const isEditing = editingGuestId !== null;
+    const url = isEditing
+      ? `${API_BASE_URL}/admin/guests/update/${editingGuestId}`
+      : `${API_BASE_URL}/admin/guests`;
+
     try {
-      const res = await fetch(`${API_BASE_URL}/admin/guests`, {
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,20 +110,41 @@ export function AdminDashboard() {
       });
 
       if (res.ok) {
-        const created = await res.json();
-        setGuestFormSuccess(`¡Invitado ${created.nombre} fichado con éxito! Código: ${created.codigoAcceso}`);
+        const result = await res.json();
+        if (isEditing) {
+          setGuestFormSuccess(`¡Invitado ${result.nombre} actualizado con éxito!`);
+          setEditingGuestId(null);
+        } else {
+          setGuestFormSuccess(`¡Invitado ${result.nombre} fichado con éxito! Código: ${result.codigoAcceso}`);
+        }
         setNewGuestName('');
         setNewGuestMaxPasses(2);
         setNewGuestCode('');
         fetchAdminData();
       } else {
         const errData = await res.json();
-        setGuestFormError(errData.message || 'Error al fichar invitado.');
+        setGuestFormError(errData.message || 'Error al procesar invitado.');
       }
     } catch (err) {
       setGuestFormError('Error de conexión.');
     }
   };
+
+  const handleEditClick = (guest) => {
+    setEditingGuestId(guest.id);
+    setNewGuestName(guest.nombre);
+    setNewGuestMaxPasses(guest.pasesMaximos);
+    setNewGuestCode(guest.codigoAcceso);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingGuestId(null);
+    setNewGuestName('');
+    setNewGuestMaxPasses(2);
+    setNewGuestCode('');
+  };
+
 
   const handleDeleteGuest = async (id) => {
     if (!window.confirm('¿Seguro que deseas eliminar este invitado?')) return;
@@ -264,7 +291,9 @@ export function AdminDashboard() {
 
           {/* Quick Add Guest Form */}
           <section className="bg-white border border-slate-200/60 rounded-3xl p-6 md:p-8 shadow-sm">
-            <h3 className="text-xl font-extrabold text-slate-800 mb-5">📝 Fichar Nuevo Invitado</h3>
+            <h3 className="text-xl font-extrabold text-slate-800 mb-5">
+              {editingGuestId ? '✏️ Editar Invitado' : '📝 Fichar Nuevo Invitado'}
+            </h3>
             <form onSubmit={handleAddGuest} className="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
               <div>
                 <label className="block text-[10px] font-extrabold text-slate-500 uppercase mb-1 tracking-wider">Nombre Completo / Familia</label>
@@ -288,22 +317,31 @@ export function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-extrabold text-slate-500 uppercase mb-1 tracking-wider">Código de Boleto (Opcional)</label>
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase mb-1 tracking-wider">Código de Boleto</label>
                 <input
                   type="text"
-                  placeholder="Ej: FAM001 (Vacío para auto)"
+                  placeholder="Ej: FAM001"
                   value={newGuestCode}
                   onChange={(e) => setNewGuestCode(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 font-semibold text-slate-700 bg-white uppercase tracking-wider"
                 />
               </div>
-              <div>
+              <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-slate-900 text-white rounded-xl font-black hover:bg-slate-950 transition text-xs tracking-wider uppercase shadow-sm"
+                  className="flex-1 py-3.5 bg-slate-900 text-white rounded-xl font-black hover:bg-slate-950 transition text-xs tracking-wider uppercase shadow-sm"
                 >
-                  Fichar Invitado
+                  {editingGuestId ? 'Guardar' : 'Fichar'}
                 </button>
+                {editingGuestId && (
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    className="px-4 py-3.5 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition text-xs tracking-wider uppercase border border-slate-200/50 font-semibold"
+                  >
+                    Cancelar
+                  </button>
+                )}
               </div>
             </form>
             {guestFormSuccess && <p className="text-xs text-emerald-600 font-bold mt-4 text-center">{guestFormSuccess}</p>}
@@ -382,12 +420,20 @@ export function AdminDashboard() {
                           )}
                         </td>
                         <td className="py-4.5 px-4">
-                          <button
-                            onClick={() => handleDeleteGuest(guest.id)}
-                            className="px-3 py-1.5 border border-red-100 hover:border-red-200 bg-red-50/50 hover:bg-red-50 text-red-600 hover:text-red-700 rounded-lg transition text-[10px] font-bold"
-                          >
-                            Eliminar
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleEditClick(guest)}
+                              className="px-3 py-1.5 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-lg transition text-[10px] font-bold"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              onClick={() => handleDeleteGuest(guest.id)}
+                              className="px-3 py-1.5 border border-red-100 hover:border-red-200 bg-red-50/50 hover:bg-red-50 text-red-600 hover:text-red-700 rounded-lg transition text-[10px] font-bold"
+                            >
+                              Eliminar
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))

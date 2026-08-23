@@ -97,6 +97,16 @@ export class AppController {
     return this.appService.addGuest(body.nombre, body.pasesMaximos, body.codigoAcceso);
   }
 
+  @Post('admin/guests/update/:id')
+  async updateAdminGuest(
+    @Param('id') id: string,
+    @Body() body: { nombre: string; pasesMaximos: number; codigoAcceso?: string },
+    @Headers('x-admin-password') adminPass?: string,
+  ) {
+    this.checkAdminAuth(adminPass);
+    return this.appService.updateGuest(id, body.nombre, body.pasesMaximos, body.codigoAcceso);
+  }
+
   @Delete('admin/guests/:id')
   async deleteAdminGuest(@Param('id') id: string, @Headers('x-admin-password') adminPass?: string) {
     this.checkAdminAuth(adminPass);
