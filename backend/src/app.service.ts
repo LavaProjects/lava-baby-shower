@@ -189,11 +189,21 @@ export class AppService {
     return password === adminPass;
   }
 
-  // Obtener todos los invitados
-  async getAllGuests(): Promise<Guest[]> {
-    return this.guestRepository.find({
+  // Obtener todos los invitados con su voto
+  async getAllGuests(): Promise<any[]> {
+    const guests = await this.guestRepository.find({
       order: { nombre: 'ASC' },
     });
+    const votes = await this.voteRepository.find();
+    const voteMap = new Map<string, 'nino' | 'nina'>();
+    votes.forEach((v) => {
+      voteMap.set(v.codigoAcceso, v.opcion);
+    });
+
+    return guests.map((guest) => ({
+      ...guest,
+      voto: voteMap.get(guest.codigoAcceso) || null,
+    }));
   }
 
   // Agregar nuevo invitado

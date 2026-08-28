@@ -194,6 +194,12 @@ export function AdminDashboard() {
     if (adminFilter === 'pendientes') {
       return matchesSearch && !guest.confirmado;
     }
+    if (adminFilter === 'voto-nino') {
+      return matchesSearch && guest.voto === 'nino';
+    }
+    if (adminFilter === 'voto-nina') {
+      return matchesSearch && guest.voto === 'nina';
+    }
     return matchesSearch;
   });
 
@@ -369,18 +375,20 @@ export function AdminDashboard() {
                   />
                 </div>
 
-                <div className="flex border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5 text-[10px] font-extrabold text-slate-500 w-full sm:w-auto justify-between">
+                <div className="flex flex-wrap border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5 text-[10px] font-extrabold text-slate-500 w-full md:w-auto gap-0.5">
                   {[
                     { key: 'todos', label: 'Todos' },
                     { key: 'confirmados-si', label: 'Asistirá ⚽' },
                     { key: 'confirmados-no', label: 'No Asistirá ❌' },
-                    { key: 'pendientes', label: 'Pendientes ⏳' }
+                    { key: 'pendientes', label: 'Pendientes ⏳' },
+                    { key: 'voto-nino', label: 'Voto Niño 👶' },
+                    { key: 'voto-nina', label: 'Voto Niña 👧' }
                   ].map((filterObj) => (
                     <button
                       key={filterObj.key}
                       onClick={() => setAdminFilter(filterObj.key)}
                       type="button"
-                      className={`px-3 py-2 rounded-lg transition text-center flex-1 sm:flex-none ${
+                      className={`px-3 py-1.5 rounded-lg transition text-center ${
                         adminFilter === filterObj.key 
                           ? 'bg-white text-slate-800 shadow-sm border border-slate-200/40 font-black' 
                           : 'hover:text-slate-800'
@@ -401,13 +409,14 @@ export function AdminDashboard() {
                     <th className="py-4 px-4 font-black">Boleto / Código</th>
                     <th className="py-4 px-4 font-black">Pases Disponibles</th>
                     <th className="py-4 px-4 font-black">Estado RSVP</th>
+                    <th className="py-4 px-4 font-black">Voto Género</th>
                     <th className="py-4 px-4 font-black">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {filteredGuests.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="py-12 text-center text-slate-400 font-handwritten text-3xl">
+                      <td colSpan="6" className="py-12 text-center text-slate-400 font-handwritten text-3xl">
                         No se encontraron hinchas en el vestidor.
                       </td>
                     </tr>
@@ -429,6 +438,23 @@ export function AdminDashboard() {
                           ) : (
                             <span className="inline-block px-2.5 py-1 bg-red-50 text-red-700 border border-red-100/50 rounded-full text-[9px] font-black uppercase tracking-wider">
                               No Asistirá ❌
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-4.5 px-4">
+                          {guest.voto === 'nino' ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 text-sky-700 border border-sky-200/60 rounded-full text-[9px] font-black uppercase tracking-wider">
+                              <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                              <span>Niño ⚽</span>
+                            </span>
+                          ) : guest.voto === 'nina' ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-pink-50 text-pink-700 border border-pink-200/60 rounded-full text-[9px] font-black uppercase tracking-wider">
+                              <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                              <span>Niña 🎀</span>
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 text-[10px] font-bold">
+                              Sin voto —
                             </span>
                           )}
                         </td>
