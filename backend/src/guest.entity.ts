@@ -23,6 +23,6 @@ export class Guest {
   @Column({ default: false })
   confirmado: boolean; // Si ya completó el formulario
 
-  @CreateDateColumn({ nullable: true })
-  confirmadoEn: Date;
+  @Column({ nullable: true })
+  confirmadoEn?: Date;
 }

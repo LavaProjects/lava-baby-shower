@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaSortAmountDown } from 'react-icons/fa';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -18,6 +18,7 @@ export function AdminDashboard() {
   const [guestFormError, setGuestFormError] = useState('');
   const [adminSearch, setAdminSearch] = useState('');
   const [adminFilter, setAdminFilter] = useState('todos');
+  const [adminSort, setAdminSort] = useState('confirmacion-desc');
   const [editingGuestId, setEditingGuestId] = useState(null);
 
   useEffect(() => {
@@ -181,27 +182,64 @@ export function AdminDashboard() {
     }
   };
 
-  const filteredGuests = adminGuests.filter((guest) => {
-    const matchesSearch = guest.nombre.toLowerCase().includes(adminSearch.toLowerCase()) || 
-                          guest.codigoAcceso.toLowerCase().includes(adminSearch.toLowerCase());
-    
-    if (adminFilter === 'confirmados-si') {
-      return matchesSearch && guest.confirmado && guest.asistira;
-    }
-    if (adminFilter === 'confirmados-no') {
-      return matchesSearch && guest.confirmado && !guest.asistira;
-    }
-    if (adminFilter === 'pendientes') {
-      return matchesSearch && !guest.confirmado;
-    }
-    if (adminFilter === 'voto-nino') {
-      return matchesSearch && guest.voto === 'nino';
-    }
-    if (adminFilter === 'voto-nina') {
-      return matchesSearch && guest.voto === 'nina';
-    }
-    return matchesSearch;
-  });
+  const filteredGuests = adminGuests
+    .filter((guest) => {
+      const matchesSearch = guest.nombre.toLowerCase().includes(adminSearch.toLowerCase()) || 
+                            guest.codigoAcceso.toLowerCase().includes(adminSearch.toLowerCase());
+      
+      if (adminFilter === 'confirmados-si') {
+        return matchesSearch && guest.confirmado && guest.asistira;
+      }
+      if (adminFilter === 'confirmados-no') {
+        return matchesSearch && guest.confirmado && !guest.asistira;
+      }
+      if (adminFilter === 'pendientes') {
+        return matchesSearch && !guest.confirmado;
+      }
+      if (adminFilter === 'voto-nino') {
+        return matchesSearch && guest.voto === 'nino';
+      }
+      if (adminFilter === 'voto-nina') {
+        return matchesSearch && guest.voto === 'nina';
+      }
+      return matchesSearch;
+    })
+    .sort((a, b) => {
+      if (adminSort === 'confirmacion-desc') {
+        // Confirmados primero, ordenados por fecha de confirmación más reciente
+        if (a.confirmado && !b.confirmado) return -1;
+        if (!a.confirmado && b.confirmado) return 1;
+        if (a.confirmado && b.confirmado) {
+          const dateA = a.confirmadoEn ? new Date(a.confirmadoEn).getTime() : 0;
+          const dateB = b.confirmadoEn ? new Date(b.confirmadoEn).getTime() : 0;
+          if (dateB !== dateA) return dateB - dateA;
+        }
+        return a.nombre.localeCompare(b.nombre);
+      }
+      if (adminSort === 'confirmacion-asc') {
+        if (a.confirmado && !b.confirmado) return -1;
+        if (!a.confirmado && b.confirmado) return 1;
+        if (a.confirmado && b.confirmado) {
+          const dateA = a.confirmadoEn ? new Date(a.confirmadoEn).getTime() : 0;
+          const dateB = b.confirmadoEn ? new Date(b.confirmadoEn).getTime() : 0;
+          if (dateA !== dateB) return dateA - dateB;
+        }
+        return a.nombre.localeCompare(b.nombre);
+      }
+      if (adminSort === 'nombre-asc') {
+        return a.nombre.localeCompare(b.nombre);
+      }
+      if (adminSort === 'nombre-desc') {
+        return b.nombre.localeCompare(a.nombre);
+      }
+      if (adminSort === 'pases-desc') {
+        return b.pasesMaximos - a.pasesMaximos;
+      }
+      if (adminSort === 'pases-asc') {
+        return a.pasesMaximos - b.pasesMaximos;
+      }
+      return 0;
+    });
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 selection:bg-soccer-gold selection:text-white font-sans bg-white min-h-screen text-slate-800">
@@ -360,35 +398,55 @@ export function AdminDashboard() {
 
           {/* Guest Management Table */}
           <section className="bg-white border border-slate-200/60 rounded-3xl p-6 md:p-8 shadow-sm">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
               <h3 className="text-xl font-extrabold text-slate-800">📋 Lista General de Aficionados</h3>
               
-              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-center">
-                <div className="relative w-full sm:w-64">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full lg:w-auto items-stretch sm:items-center">
+                {/* Search Bar */}
+                <div className="relative flex-1 sm:w-56">
                   <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-3.5 h-3.5" />
                   <input
                     type="text"
-                    placeholder="Buscar hincha por nombre o código..."
+                    placeholder="Buscar hincha o código..."
                     value={adminSearch}
                     onChange={(e) => setAdminSearch(e.target.value)}
-                    className="pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-800 font-semibold text-slate-700 bg-white w-full"
+                    className="pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-slate-800 font-semibold text-slate-700 bg-white w-full"
                   />
                 </div>
 
-                <div className="flex flex-wrap border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5 text-[10px] font-extrabold text-slate-500 w-full md:w-auto gap-0.5">
+                {/* Sort selector */}
+                <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600">
+                  <FaSortAmountDown className="w-3 h-3 text-slate-400 shrink-0" />
+                  <span className="text-[10px] uppercase font-extrabold text-slate-400">Orden:</span>
+                  <select
+                    value={adminSort}
+                    onChange={(e) => setAdminSort(e.target.value)}
+                    className="bg-transparent text-slate-800 font-bold text-xs focus:outline-none cursor-pointer"
+                  >
+                    <option value="confirmacion-desc">⚡ Confirmados (Más reciente)</option>
+                    <option value="confirmacion-asc">⏳ Confirmados (Más antiguo)</option>
+                    <option value="nombre-asc">🔤 Nombre (A - Z)</option>
+                    <option value="nombre-desc">🔤 Nombre (Z - A)</option>
+                    <option value="pases-desc">🎟️ Más Pases</option>
+                    <option value="pases-asc">🎟️ Menos Pases</option>
+                  </select>
+                </div>
+
+                {/* Status and vote filters */}
+                <div className="flex flex-wrap border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5 text-[10px] font-extrabold text-slate-500 w-full sm:w-auto gap-0.5">
                   {[
                     { key: 'todos', label: 'Todos' },
                     { key: 'confirmados-si', label: 'Asistirá ⚽' },
                     { key: 'confirmados-no', label: 'No Asistirá ❌' },
                     { key: 'pendientes', label: 'Pendientes ⏳' },
-                    { key: 'voto-nino', label: 'Voto Niño 👶' },
-                    { key: 'voto-nina', label: 'Voto Niña 👧' }
+                    { key: 'voto-nino', label: 'Niño 👶' },
+                    { key: 'voto-nina', label: 'Niña 👧' }
                   ].map((filterObj) => (
                     <button
                       key={filterObj.key}
                       onClick={() => setAdminFilter(filterObj.key)}
                       type="button"
-                      className={`px-3 py-1.5 rounded-lg transition text-center ${
+                      className={`px-2.5 py-1.5 rounded-lg transition text-center ${
                         adminFilter === filterObj.key 
                           ? 'bg-white text-slate-800 shadow-sm border border-slate-200/40 font-black' 
                           : 'hover:text-slate-800'
@@ -432,13 +490,37 @@ export function AdminDashboard() {
                               Pendiente ⏳
                             </span>
                           ) : guest.asistira ? (
-                            <span className="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full text-[9px] font-black uppercase tracking-wider">
-                              Confirma: {guest.pasesConfirmados} pases ⚽
-                            </span>
+                            <div className="space-y-0.5">
+                              <span className="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                Confirma: {guest.pasesConfirmados} pases ⚽
+                              </span>
+                              {guest.confirmadoEn && (
+                                <span className="block text-[10px] text-slate-400 font-semibold">
+                                  {new Date(guest.confirmadoEn).toLocaleDateString('es-MX', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                              )}
+                            </div>
                           ) : (
-                            <span className="inline-block px-2.5 py-1 bg-red-50 text-red-700 border border-red-100/50 rounded-full text-[9px] font-black uppercase tracking-wider">
-                              No Asistirá ❌
-                            </span>
+                            <div className="space-y-0.5">
+                              <span className="inline-block px-2.5 py-1 bg-red-50 text-red-700 border border-red-100/50 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                No Asistirá ❌
+                              </span>
+                              {guest.confirmadoEn && (
+                                <span className="block text-[10px] text-slate-400 font-semibold">
+                                  {new Date(guest.confirmadoEn).toLocaleDateString('es-MX', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                              )}
+                            </div>
                           )}
                         </td>
                         <td className="py-4.5 px-4">
