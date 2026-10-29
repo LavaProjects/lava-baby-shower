@@ -101,16 +101,16 @@ export function ScheduleSection() {
 
         {/* 06:00 PM - 06:30 PM */}
         <div className="relative pl-8 md:pl-10">
-          <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-soccer-gold border-4 border-white shadow-sm animate-pulse"></div>
-          <span className="inline-block px-2.5 py-0.5 bg-soccer-gold-light/50 text-soccer-gold-dark text-[10px] font-black rounded-full border border-soccer-gold/20 tracking-wider uppercase mb-1">
-            06:00 PM - 06:30 PM
+          <div className="absolute -left-[9px] top-1.5 w-4.5 h-4.5 rounded-full bg-pink-500 border-4 border-white shadow-sm animate-pulse"></div>
+          <span className="inline-block px-2.5 py-0.5 bg-pink-100 text-pink-700 text-[10px] font-black rounded-full border border-pink-200 tracking-wider uppercase mb-1">
+            06:00 PM - 06:30 PM • ¡GOL DE ORO ANOTADO!
           </span>
           <h4 className="text-base font-extrabold text-slate-800 mt-0.5 inline-flex items-center gap-2">
-            <span>El Gran Gol de Oro: Revelación</span>
-            <FaTrophy className="w-6.5 h-6.5 text-soccer-gold inline animate-bounce" />
+            <span>El Gran Gol de Oro: ¡Es Niña! (Lía Saori)</span>
+            <FaTrophy className="w-6.5 h-6.5 text-pink-500 inline animate-bounce" />
           </h4>
-          <p className="text-slate-500 text-xs mt-1 leading-relaxed font-medium">
-            ¡El silbatazo definitivo del partido! Momento estelar en el que descubriremos los colores de nuestro nuevo integrante estrella.
+          <p className="text-pink-800 text-xs mt-1 leading-relaxed font-bold">
+            ¡Momento culminante del partido! Se reveló con inmensa emoción que nuestro fichaje estrella es una hermosa nena que llevará por nombre Lía Saori.
           </p>
         </div>
 

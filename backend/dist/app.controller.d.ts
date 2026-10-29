@@ -13,7 +13,7 @@ export declare class AppController {
         pasesConfirmados: number;
         asistira: boolean;
         confirmado: boolean;
-        confirmadoEn: Date;
+        confirmadoEn?: Date;
     }>;
     confirmAttendance(body: {
         codigo: string;
@@ -60,7 +60,7 @@ export declare class AppController {
         votosNina: number;
         votosTotal: number;
     }>;
-    getAdminGuests(adminPass?: string): Promise<import("./guest.entity").Guest[]>;
+    getAdminGuests(adminPass?: string): Promise<any[]>;
     addAdminGuest(body: {
         nombre: string;
         pasesMaximos: number;

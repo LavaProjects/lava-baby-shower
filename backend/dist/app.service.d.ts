@@ -26,7 +26,7 @@ export declare class AppService {
         count: number;
     }>;
     validateAdminPassword(password: string): boolean;
-    getAllGuests(): Promise<Guest[]>;
+    getAllGuests(): Promise<any[]>;
     addGuest(nombre: string, pasesMaximos: number, codigoAcceso?: string): Promise<Guest>;
     deleteGuest(id: string): Promise<{
         success: boolean;

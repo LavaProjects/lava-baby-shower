@@ -161,9 +161,18 @@ let AppService = class AppService {
         return password === adminPass;
     }
     async getAllGuests() {
-        return this.guestRepository.find({
+        const guests = await this.guestRepository.find({
             order: { nombre: 'ASC' },
         });
+        const votes = await this.voteRepository.find();
+        const voteMap = new Map();
+        votes.forEach((v) => {
+            voteMap.set(v.codigoAcceso, v.opcion);
+        });
+        return guests.map((guest) => ({
+            ...guest,
+            voto: voteMap.get(guest.codigoAcceso) || null,
+        }));
     }
     async addGuest(nombre, pasesMaximos, codigoAcceso) {
         if (!nombre || nombre.trim().length === 0) {

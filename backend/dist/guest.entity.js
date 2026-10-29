@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Guest.prototype, "confirmado", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
 ], Guest.prototype, "confirmadoEn", void 0);
 exports.Guest = Guest = __decorate([

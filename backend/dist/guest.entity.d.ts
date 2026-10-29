@@ -6,5 +6,5 @@ export declare class Guest {
     pasesConfirmados: number;
     asistira: boolean;
     confirmado: boolean;
-    confirmadoEn: Date;
+    confirmadoEn?: Date;
 }

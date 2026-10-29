@@ -32,8 +32,8 @@ export function Scoreboard({ targetDateString = '2026-10-25T14:00:00' }) {
   return (
     <section className="bg-white border border-slate-200/60 rounded-3xl p-6 md:p-8 shadow-sm text-center mb-10 relative overflow-hidden bg-gradient-to-br from-emerald-50/30 via-white to-sky-50/30">
       <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
-      <ScoreboardHeader />
-      <CountdownTimer timeLeft={timeLeft} />
+      <ScoreboardHeader isFinished={true} />
+      <CountdownTimer timeLeft={timeLeft} isFinished={true} />
     </section>
   );
 }

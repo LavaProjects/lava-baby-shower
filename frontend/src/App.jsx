@@ -3,6 +3,8 @@ import './App.css';
 
 // Modular Section Components
 import { SoccerConfettiBg } from './components/BackgroundConfetti/server/SoccerConfettiBg';
+import { FallingConfetti } from './components/Celebration/FallingConfetti';
+import { ThankYouRevealCard } from './components/Celebration/ThankYouRevealCard';
 import { Hero } from './components/Hero';
 import { IntroCard } from './components/Intro/server/IntroCard';
 import { Scoreboard } from './components/Scoreboard';
@@ -47,9 +49,11 @@ function App() {
   return (
     <div className="min-h-screen relative overflow-x-hidden select-none font-sans text-slate-800">
       <SoccerConfettiBg />
+      <FallingConfetti />
       <Hero />
 
       <main className="max-w-4xl mx-auto px-4 pb-10 relative z-10">
+        <ThankYouRevealCard />
         <IntroCard />
         <Scoreboard />
         <TicketSection onValidationChange={handleValidationChange} />
