@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { FaSearch, FaSortAmountDown } from 'react-icons/fa';
+import { FaSearch, FaSortAmountDown, FaFilePdf } from 'react-icons/fa';
+import { exportMessagesPdf } from '../../../utils/pdfGenerator';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -11,6 +12,7 @@ export function AdminDashboard() {
   const [adminGuests, setAdminGuests] = useState([]);
   const [adminSummary, setAdminSummary] = useState(null);
   const [adminMessages, setAdminMessages] = useState([]);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [newGuestName, setNewGuestName] = useState('');
   const [newGuestMaxPasses, setNewGuestMaxPasses] = useState(2);
   const [newGuestCode, setNewGuestCode] = useState('');
@@ -182,6 +184,19 @@ export function AdminDashboard() {
     }
   };
 
+  const handleDownloadPdf = async () => {
+    if (adminMessages.length === 0) {
+      alert('Aún no hay dedicatorias registradas en la base de datos para descargar.');
+      return;
+    }
+    setIsGeneratingPdf(true);
+    try {
+      await exportMessagesPdf(adminMessages);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
   const filteredGuests = adminGuests
     .filter((guest) => {
       const matchesSearch = guest.nombre.toLowerCase().includes(adminSearch.toLowerCase()) || 
@@ -254,6 +269,18 @@ export function AdminDashboard() {
           </h1>
         </div>
         <div className="flex flex-wrap gap-3">
+          {isAdminLoggedIn && (
+            <button
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf || adminMessages.length === 0}
+              className="px-5 py-3 border border-pink-200 bg-pink-50 hover:bg-pink-100 font-extrabold text-pink-700 rounded-full transition text-sm flex items-center space-x-2 shadow-sm disabled:opacity-50 cursor-pointer"
+              title="Descargar libro de dedicatorias de la afición en PDF"
+            >
+              <FaFilePdf className="w-4 h-4 text-pink-600" />
+              <span>{isGeneratingPdf ? 'Generando PDF...' : 'Descargar Mensajes (PDF)'}</span>
+            </button>
+          )}
+
           <button
             onClick={() => { window.location.hash = ''; }}
             className="px-6 py-3 border border-slate-200 bg-white hover:bg-slate-50 font-extrabold text-slate-700 rounded-full transition text-sm flex items-center space-x-2 shadow-sm"
@@ -566,7 +593,23 @@ export function AdminDashboard() {
 
           {/* Message Wall Moderation */}
           <section className="bg-white border border-slate-200/60 rounded-3xl p-6 md:p-8 shadow-sm">
-            <h3 className="text-xl font-extrabold text-slate-800 mb-5">💬 Moderación de Firmas de la Afición</h3>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <div>
+                <h3 className="text-xl font-extrabold text-slate-800">💬 Firmas & Dedicatorias de la Afición</h3>
+                <p className="text-xs text-slate-500 font-semibold mt-0.5">
+                  Total de dedicatorias registradas: <strong className="text-pink-600">{adminMessages.length} mensajes</strong> para Lía Saori 🎀
+                </p>
+              </div>
+
+              <button
+                onClick={handleDownloadPdf}
+                disabled={isGeneratingPdf || adminMessages.length === 0}
+                className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-600 hover:to-rose-700 disabled:opacity-50 text-white rounded-xl text-xs font-black tracking-wide uppercase shadow-sm hover:shadow flex items-center justify-center gap-2 transition cursor-pointer active:scale-95"
+              >
+                <FaFilePdf className="w-4 h-4" />
+                <span>{isGeneratingPdf ? 'Generando PDF...' : '📄 Descargar Libro en PDF'}</span>
+              </button>
+            </div>
             
             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
               {adminMessages.length === 0 ? (
