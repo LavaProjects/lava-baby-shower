@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { FaSearch, FaSortAmountDown, FaFilePdf } from 'react-icons/fa';
-import { exportMessagesPdf } from '../../../utils/pdfGenerator';
+import { FaSearch, FaSortAmountDown, FaFilePdf, FaBookOpen } from 'react-icons/fa';
+import { exportMessagesPdf, openPrintableKeepsake } from '../../../utils/pdfGenerator';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -192,9 +192,21 @@ export function AdminDashboard() {
     setIsGeneratingPdf(true);
     try {
       await exportMessagesPdf(adminMessages);
+    } catch (err) {
+      console.error('Error al generar PDF:', err);
+      alert('Hubo un error al generar el PDF. Abriendo vista imprimible de respaldo...');
+      openPrintableKeepsake(adminMessages);
     } finally {
       setIsGeneratingPdf(false);
     }
+  };
+
+  const handleOpenPrintable = () => {
+    if (adminMessages.length === 0) {
+      alert('Aún no hay dedicatorias registradas en la base de datos.');
+      return;
+    }
+    openPrintableKeepsake(adminMessages);
   };
 
   const filteredGuests = adminGuests
@@ -601,14 +613,26 @@ export function AdminDashboard() {
                 </p>
               </div>
 
-              <button
-                onClick={handleDownloadPdf}
-                disabled={isGeneratingPdf || adminMessages.length === 0}
-                className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-600 hover:to-rose-700 disabled:opacity-50 text-white rounded-xl text-xs font-black tracking-wide uppercase shadow-sm hover:shadow flex items-center justify-center gap-2 transition cursor-pointer active:scale-95"
-              >
-                <FaFilePdf className="w-4 h-4" />
-                <span>{isGeneratingPdf ? 'Generando PDF...' : '📄 Descargar Libro en PDF'}</span>
-              </button>
+              <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                <button
+                  onClick={handleDownloadPdf}
+                  disabled={isGeneratingPdf || adminMessages.length === 0}
+                  className="flex-1 sm:flex-none px-4 py-2.5 bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-600 hover:to-rose-700 disabled:opacity-50 text-white rounded-xl text-xs font-black tracking-wide uppercase shadow-sm hover:shadow flex items-center justify-center gap-2 transition cursor-pointer active:scale-95"
+                >
+                  <FaFilePdf className="w-4 h-4" />
+                  <span>{isGeneratingPdf ? 'Generando PDF...' : 'Descargar PDF'}</span>
+                </button>
+
+                <button
+                  onClick={handleOpenPrintable}
+                  disabled={adminMessages.length === 0}
+                  className="flex-1 sm:flex-none px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 disabled:opacity-50 rounded-xl text-xs font-black tracking-wide uppercase shadow-sm flex items-center justify-center gap-2 transition cursor-pointer active:scale-95"
+                  title="Abrir vista de impresión a todo color con emojis"
+                >
+                  <FaBookOpen className="w-4 h-4 text-slate-500" />
+                  <span>Vista Imprimible</span>
+                </button>
+              </div>
             </div>
             
             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
